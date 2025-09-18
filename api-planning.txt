@@ -1,0 +1,74 @@
+1. Main Route
+
+GET / => Homepage
+Purpose: Return homepage content (mix of events, things to do, places to stay, etc.) pulled from APIs and scraping.
+Response: JSON with arrays of featured items.
+
+2. View Routes
+
+GET /events => Events Page
+Purpose: Fetch all events happening in Jamestown.
+Query params: ?date=today, ?category=music, etc.
+Response: List of events with title, date, location, description, image, website, etc.
+
+GET /places => Places to Stay Page
+Purpose: Show places to stay (hotels, inns, B&Bs, etc).
+Response: List of places with address, amenities, price range, location, etc.
+
+GET /things-to-do => Things to Do Page
+Purpose: Return activities (beaches, parks, restaurants, hiking, etc).
+Response: List with category + details.
+
+3. Authentication Routes
+
+Users can register/login to save events, places, things to do, to their account.
+
+GET /register => Registration Form Page
+Purpose: Give users the ability to login to the app to save events.
+Response: Page with registration form.
+
+POST /register => User Registration
+Body: { "email": "user@example.com", "password": "password123" }
+Response: 201 Created with user account + JWT cookie.
+
+GET /login => Login Form Page
+Purpose: Users can login to the site.
+Response: Page with login form.
+
+POST /login
+Body: { "email": "user@example.com", "password": "password123" }
+Response: 200 OK with JWT cookie.
+
+POST /logout
+Response: 200 OK clears JWT cookie.
+
+4. Profile Routes
+
+For logged-in users only.
+
+GET /profile
+Auth required.
+Purpose: Fetch profile and saved items.
+Response: { user: {}, savedEvents: [], savedPlaces: [], savedThings: [] }.
+
+POST /profile/save
+Auth required.
+Body: { type: "event" | "place" | "thing", itemId: "<id>" }
+Response: 201 Created confirms save.
+
+DELETE /profile/save/:id
+Auth required.
+Purpose: Remove saved item.
+
+5. Routes for scraping and APIs with a cron job
+
+For scraping data:
+
+POST /scrape/events
+Purpose: Trigger a scrape for events with a cron job.
+
+POST /scrape/places
+Purpose: Trigger scrape of places to stay with a cron job.
+
+POST /scrape/things-to-do
+Purpose: Trigger scrape of things to do with a cron job.
